@@ -128,25 +128,76 @@
   });
 
   const phone = String(config.whatsappNumber || "").trim();
-  if (/^[1-9]\d{7,14}$/.test(phone)) {
+  const hasWhatsApp = /^[1-9]\d{7,14}$/.test(phone);
+  if (hasWhatsApp) {
     $("whatsapp-link").href = "https://wa.me/" + phone + "?text=" + encodeURIComponent(config.whatsappMessage || "Hi! I'd like to book a tattoo.");
     $("whatsapp-link").hidden = false;
     $("booking-unavailable").hidden = true;
-    $("booking-confirmation").hidden = false;
+    $("booking-submit").disabled = false;
   }
-  const rom = safeAsset(config.arcade?.romUrl);
-  if (rom) {
-    $("arcade-status").textContent = "READY WHEN YOU ARE.";
-    $("arcade-note").textContent = "Launch the arcade to play.";
-    $("launch-game").hidden = false;
-    $("launch-game").addEventListener("click", () => {
-      $("game-frame").src = "arcade.html";
-      $("game-frame").hidden = false;
-      $("game-waiting").hidden = true;
-      $("close-game").hidden = false;
-      $("game-frame").focus();
+  try {
+    const instagram = new URL(config.instagramUrl);
+    if (instagram.protocol === "https:" && ["instagram.com", "www.instagram.com"].includes(instagram.hostname) && instagram.pathname.length > 1) {
+      $("instagram-link").href = instagram.href;
+      $("instagram-link").hidden = false;
+    }
+  } catch { /* Keep unconfigured social links hidden. */ }
+
+  const requiredFields = ["booking-name", "booking-idea", "booking-placement"];
+  requiredFields.forEach(id => $(id).addEventListener("input", () => $(id).setCustomValidity("")));
+  $("booking-form").addEventListener("submit", event => {
+    event.preventDefault();
+    if (!hasWhatsApp) return;
+    requiredFields.forEach(id => $(id).setCustomValidity($(id).value.trim() ? "" : "Please fill in this field."));
+    if (!$("booking-form").reportValidity()) return;
+    const lines = [
+      "Hi Great Time Tattoo! I'd like to enquire about a tattoo.",
+      "",
+      "Name: " + $("booking-name").value.trim(),
+      "Idea: " + $("booking-idea").value.trim(),
+      "Placement: " + $("booking-placement").value.trim(),
+      "Approximate size: " + ($("booking-size").value.trim() || "To discuss"),
+      "Preferred date: " + ($("booking-date").value || "Flexible")
+    ];
+    location.assign("https://wa.me/" + phone + "?text=" + encodeURIComponent(lines.join("\n")));
+  });
+
+  const games = Array.isArray(config.arcade?.games) ? config.arcade.games : [
+    { id:"pacman", gameName:"Pac-Man", ...config.arcade }
+  ];
+  let selectedGame = games[0];
+  const gameButtons = document.querySelectorAll("[data-game]");
+  function selectGame(id) {
+    const next = games.find(game => game.id === id);
+    if (!next) return;
+    stopGame();
+    selectedGame = next;
+    const available = !!safeAsset(next.romUrl);
+    $("arcade-title").textContent = next.gameName.toUpperCase();
+    $("arcade-number").textContent = String(games.indexOf(next) + 1).padStart(2,"0") + " / 03";
+    $("arcade-status").textContent = available ? "READY WHEN YOU ARE." : "COMING SOON.";
+    $("arcade-note").textContent = available ? "Launch the arcade to play." : next.gameName + " is coming soon.";
+    $("launch-game").textContent = "Play " + next.gameName;
+    $("launch-game").hidden = !available;
+    $("game-frame").title = next.gameName + " emulator";
+    $("game-controls").textContent = next.id === "tetris"
+      ? "Enter to start · Arrow keys to move · Z / X to rotate · Touch controls on mobile"
+      : "Enter to start · Arrow keys to move · Touch controls on mobile";
+    gameButtons.forEach(button => {
+      button.classList.toggle("current", button.dataset.game === next.id);
+      button.setAttribute("aria-pressed", String(button.dataset.game === next.id));
     });
   }
+  gameButtons.forEach(button => button.addEventListener("click", () => selectGame(button.dataset.game)));
+  if (selectedGame) selectGame(selectedGame.id);
+  $("launch-game").addEventListener("click", () => {
+    if (!selectedGame || !safeAsset(selectedGame.romUrl)) return;
+    $("game-frame").src = "arcade.html?game=" + encodeURIComponent(selectedGame.id) + "&v=4";
+    $("game-frame").hidden = false;
+    $("game-waiting").hidden = true;
+    $("close-game").hidden = false;
+    $("game-frame").focus();
+  });
   $("close-game").addEventListener("click", () => { stopGame(); $("launch-game").focus(); });
   $("year").textContent = new Date().getFullYear();
   window.addEventListener("hashchange", route);
