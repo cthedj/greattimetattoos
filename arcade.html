@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pac-Man — Great Time Arcade</title>
+<style>html,body{margin:0;height:100%;background:#101013;color:#fff;font:14px/1.6 monospace}*{box-sizing:border-box}#game{width:100%;height:100%}#status{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;background:#101013;z-index:2}#status[hidden]{display:none}#status p{max-width:340px}button{background:#f8ed38;color:#171717;padding:10px 16px;border:0;font:700 14px monospace;cursor:pointer}#help{position:absolute;left:0;right:0;bottom:0;background:#101013ee;padding:8px 12px;color:#ccc;font-size:11px;z-index:3;text-align:center}#help[hidden]{display:none}</style>
+<script src="site-config.js"></script></head><body>
+<div id="game"></div><div id="status" role="status"><p>Loading the arcade…</p></div>
+<script>
+(async () => {
+  const cfg = window.GREAT_TIME?.arcade || {};
+  const status = document.getElementById("status");
+  let timeout;
+  function fail(message) {
+    clearTimeout(timeout);
+    status.hidden = false;
+    status.replaceChildren();
+    const box = document.createElement("div");
+    const text = document.createElement("p"); text.textContent = message;
+    const retry = document.createElement("button"); retry.textContent = "Try again";
+    retry.onclick = () => location.reload();
+    box.append(text,retry); status.append(box);
+  }
+  if (!cfg.romUrl) { status.textContent = "Pac-Man is coming soon."; return; }
+  try {
+    const url = new URL(cfg.romUrl, location.href);
+    if (!["https:","http:"].includes(url.protocol)) throw new Error("Unsupported ROM URL");
+    const response = await fetch(url.href, {signal:AbortSignal.timeout(20000)});
+    if (!response.ok) throw new Error("ROM is unavailable");
+    const bytes = new Uint8Array(await response.arrayBuffer());
+    // Arcade ROM sets are ZIP archives. Reject HTML fallback pages and empty files.
+    if (bytes.length < 4 || bytes[0] !== 80 || bytes[1] !== 75 || bytes[2] !== 3 || bytes[3] !== 4) throw new Error("Invalid arcade archive");
+    window.EJS_player = "#game";
+    window.EJS_core = cfg.core || "mame2003";
+    window.EJS_gameUrl = url.href;
+    window.EJS_gameName = cfg.gameName || "Pac-Man";
+    window.EJS_pathtodata = cfg.dataPath || "https://cdn.emulatorjs.org/stable/data/";
+    if (cfg.parentRomUrl) window.EJS_gameParentUrl = new URL(cfg.parentRomUrl, location.href).href;
+    window.EJS_color = "#f8ed38";
+    window.EJS_backgroundColor = "#101013";
+    window.EJS_startOnLoaded = false;
+    window.EJS_startButtonName = "Start Pac-Man";
+    window.EJS_threads = false;
+    window.EJS_volume = 0.4;
+    window.EJS_ready = () => { clearTimeout(timeout); status.hidden = true; };
+    window.EJS_onGameStart = () => { clearTimeout(timeout); status.hidden = true; };
+    window.EJS_defaultControls = {
+      0: {
+        2: {value:"5",value2:"SELECT"},
+        3: {value:"enter",value2:"START"},
+        4: {value:"up arrow",value2:"DPAD_UP"},
+        5: {value:"down arrow",value2:"DPAD_DOWN"},
+        6: {value:"left arrow",value2:"DPAD_LEFT"},
+        7: {value:"right arrow",value2:"DPAD_RIGHT"}
+      }
+    };
+    status.textContent = "Loading arcade controls…";
+    const script = document.createElement("script");
+    script.src = window.EJS_pathtodata + "loader.js";
+    script.onerror = () => fail("The arcade could not load. Check your connection and try again.");
+    timeout = setTimeout(() => fail("The arcade is taking too long to load. Please try again."), 60000);
+    document.body.append(script);
+  } catch (error) {
+    fail("Pac-Man is unavailable right now. Please try again later.");
+  }
+})();
+</script></body></html>
