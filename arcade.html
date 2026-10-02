@@ -46,6 +46,8 @@
     window.EJS_startButtonName = "Start Pac-Man";
     window.EJS_threads = false;
     window.EJS_volume = 0.4;
+    window.EJS_language = "en-US";
+    window.EJS_disableAutoLang = false;
     window.EJS_ready = () => { clearTimeout(timeout); status.hidden = true; };
     window.EJS_onGameStart = () => { clearTimeout(timeout); status.hidden = true; };
     window.EJS_defaultControls = {
@@ -58,7 +60,11 @@
         5: {value:"down arrow",value2:"DPAD_DOWN"},
         6: {value:"left arrow",value2:"DPAD_LEFT"},
         7: {value:"right arrow",value2:"DPAD_RIGHT"}
-      }
+      },
+      // EmulatorJS builds settings for four players even for a one-player game.
+      1: {},
+      2: {},
+      3: {}
     };
     status.textContent = "Loading arcade controls…";
     const script = document.createElement("script");
