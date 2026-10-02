@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Pac-Man — Great Time Arcade</title>
-<style>html,body{margin:0;height:100%;background:#101013;color:#fff;font:14px/1.6 monospace}*{box-sizing:border-box}#game{width:100%;height:100%}#status{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;background:#101013;z-index:2}#status[hidden]{display:none}#status p{max-width:340px}button{background:#f8ed38;color:#171717;padding:10px 16px;border:0;font:700 14px monospace;cursor:pointer}#help{position:absolute;left:0;right:0;bottom:0;background:#101013ee;padding:8px 12px;color:#ccc;font-size:11px;z-index:3;text-align:center}#help[hidden]{display:none}</style>
+<style>html,body{margin:0;height:100%;background:#101013;color:#fff;font:14px/1.6 monospace}*{box-sizing:border-box}#game{width:100%;height:100%}#status{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;background:#101013;z-index:2}#status[hidden]{display:none}#status p{max-width:340px}button{background:#DFB011;color:#000000;padding:10px 16px;border:0;font:700 14px monospace;cursor:pointer}#help{position:absolute;left:0;right:0;bottom:0;background:#101013ee;padding:8px 12px;color:#ccc;font-size:11px;z-index:3;text-align:center}#help[hidden]{display:none}</style>
 <script src="site-config.js"></script></head><body>
 <div id="game"></div><div id="status" role="status"><p>Loading the arcade…</p></div>
 <script>
@@ -40,7 +40,7 @@
     window.EJS_gameName = cfg.gameName || "Pac-Man";
     window.EJS_pathtodata = cfg.dataPath || "https://cdn.emulatorjs.org/stable/data/";
     if (cfg.parentRomUrl) window.EJS_gameParentUrl = new URL(cfg.parentRomUrl, location.href).href;
-    window.EJS_color = "#f8ed38";
+    window.EJS_color = "#DFB011";
     window.EJS_backgroundColor = "#101013";
     window.EJS_startOnLoaded = false;
     window.EJS_startButtonName = "Start Pac-Man";
