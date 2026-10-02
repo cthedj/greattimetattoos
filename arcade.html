@@ -26,10 +26,16 @@
     const response = await fetch(url.href, {signal:AbortSignal.timeout(20000)});
     if (!response.ok) throw new Error("ROM is unavailable");
     const bytes = new Uint8Array(await response.arrayBuffer());
-    // Arcade ROM sets are ZIP archives. Reject HTML fallback pages and empty files.
-    if (bytes.length < 4 || bytes[0] !== 80 || bytes[1] !== 75 || bytes[2] !== 3 || bytes[3] !== 4) throw new Error("Invalid arcade archive");
+    const core = cfg.core || "nes";
+    const isNES = ["nes", "fceumm", "nestopia"].includes(core);
+    // Validate the selected format; do not accept HTML fallback pages as ROM data.
+    if (isNES) {
+      if (bytes.length < 16 || bytes[0] !== 78 || bytes[1] !== 69 || bytes[2] !== 83 || bytes[3] !== 26) throw new Error("Invalid NES ROM header");
+    } else if (bytes.length < 4 || bytes[0] !== 80 || bytes[1] !== 75 || bytes[2] !== 3 || bytes[3] !== 4) {
+      throw new Error("Invalid arcade archive");
+    }
     window.EJS_player = "#game";
-    window.EJS_core = cfg.core || "mame2003";
+    window.EJS_core = core;
     window.EJS_gameUrl = url.href;
     window.EJS_gameName = cfg.gameName || "Pac-Man";
     window.EJS_pathtodata = cfg.dataPath || "https://cdn.emulatorjs.org/stable/data/";
@@ -44,7 +50,9 @@
     window.EJS_onGameStart = () => { clearTimeout(timeout); status.hidden = true; };
     window.EJS_defaultControls = {
       0: {
-        2: {value:"5",value2:"SELECT"},
+        0: {value:"x",value2:"BUTTON_2"},
+        8: {value:"z",value2:"BUTTON_1"},
+        2: {value:isNES ? "shift" : "5",value2:"SELECT"},
         3: {value:"enter",value2:"START"},
         4: {value:"up arrow",value2:"DPAD_UP"},
         5: {value:"down arrow",value2:"DPAD_DOWN"},
