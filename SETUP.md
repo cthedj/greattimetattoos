@@ -13,18 +13,18 @@ Edit site-config.js:
 ## Pac-Man
 The arcade uses real EmulatorJS emulation, not a custom imitation.
 No copyrighted ROM is included. The default coming-soon state is intentional.
-1. Supply a complete authorised Pac-Man ZIP set matching the configured core.
-2. Host the archive where you are authorised to distribute it.
-3. Set arcade.romUrl to its relative path or an HTTPS URL with CORS.
-4. mame2003 is the initial core. Check the supplied set's compatibility before launch. If a split clone needs a parent ZIP, set parentRomUrl. Prefer a complete non-merged set.
-5. Test actual play before public launch. There was no ROM available for end-to-end gameplay testing.
-The loader checks for a reachable ZIP before loading the emulator. A missing ROM is never labelled playable.
-Controls: click Start Pac-Man in the emulator, 5 inserts a coin, Enter starts, arrow keys move. EmulatorJS provides touch/gamepad controls and its control settings.
+1. The supplied filename is Pac-Man (USA) (Namco).nes: prepare for the NES version, not the arcade cabinet version.
+2. The session cannot download attachments, so its actual bytes have NOT been inspected or added to the repository.
+3. Upload the file directly to the repository, preferably as roms/pacman.nes, or provide a stable authorised HTTPS host with CORS.
+4. Set arcade.romUrl only after the file is present. The configured core is nes.
+5. Test actual play before public launch. End-to-end gameplay remains unverified.
+The loader checks the NES/iNES header before loading the NES emulator; arcade cores still require a ZIP signature.
+Controls: click Start Pac-Man in the emulator, Enter starts, arrow keys move, Shift selects, Z/X are A/B. EmulatorJS provides touch/gamepad controls and its control settings.
 Use Exit game to unload the emulator and stop sound; leaving Home also unloads it.
 Tetris and Space Invaders are labelled for later; they are not implemented.
 Emulator files load on demand from the official stable CDN. A network connection is required.
 Sources:
-- https://emulatorjs.org/docs/systems/mame-2003/
+- https://emulatorjs.org/docs/systems/nes-famicom/
 - https://emulatorjs.org/docs/options/
 - https://emulatorjs.org/docs/cdn/
 
