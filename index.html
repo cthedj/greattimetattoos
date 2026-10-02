@@ -6,8 +6,8 @@
 <meta name="description" content="Great Time Tattoo — a tattoo studio in Cape Town. Explore the work, plan your next tattoo and take a break in the arcade.">
 <title>Great Time Tattoo — Cape Town</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="styles.css">
-<script src="site-config.js" defer></script><script src="app.js" defer></script>
+<link rel="stylesheet" href="styles.css?v=4">
+<script src="site-config.js?v=4" defer></script><script src="app.js?v=4" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -22,13 +22,13 @@
 <div class="hero-bottom"><p>Your next tattoo starts with an idea.<br>Bring yours. Let's make it happen.</p><div class="actions"><a class="button dark" href="#book">Book a tattoo</a><a class="text-link" href="#work">Explore the work</a></div></div>
 </div>
 <aside class="arcade" aria-labelledby="arcade-title">
-<div class="arcade-top"><span>GREAT TIME ARCADE</span><span>01 / 03</span></div>
+<div class="arcade-top"><span>GREAT TIME ARCADE</span><span id="arcade-number">01 / 03</span></div>
 <div class="game-screen" id="game-screen">
 <div class="game-waiting" id="game-waiting"><p class="pixel-label">NEXT UP</p><h2 id="arcade-title">PAC-MAN</h2><div class="game-rule"></div><p id="arcade-status">The arcade is warming up.</p><p class="game-note" id="arcade-note">Pac-Man is coming soon.</p><button class="button yellow" id="launch-game" hidden>Play Pac-Man</button></div>
 <iframe id="game-frame" title="Pac-Man arcade emulator" allow="autoplay; fullscreen; gamepad" allowfullscreen hidden></iframe>
 </div>
-<div class="arcade-footer"><span>TAKE A BREAK. CHASE A HIGH SCORE.</span><button id="close-game" class="close-game" hidden>Exit game</button></div><p class="game-controls">Enter to start · Arrow keys to move · Touch controls on mobile</p>
-<div class="game-lineup"><span class="current">01 &nbsp; Pac-Man</span><span>02 &nbsp; Tetris <small>Coming later</small></span><span>03 &nbsp; Space Invaders <small>Coming later</small></span></div>
+<div class="arcade-footer"><span>TAKE A BREAK. CHASE A HIGH SCORE.</span><button id="close-game" class="close-game" hidden>Exit game</button></div><p class="game-controls" id="game-controls">Enter to start · Arrow keys to move · Touch controls on mobile</p>
+<div class="game-lineup" role="group" aria-label="Choose a game"><button type="button" class="current" data-game="pacman" aria-pressed="true">01 &nbsp; Pac-Man</button><button type="button" data-game="tetris" aria-pressed="false">02 &nbsp; Tetris</button><span>03 &nbsp; Space Invaders <small>Coming later</small></span></div>
 </aside>
 </div>
 <div class="ticker" aria-hidden="true"><span>GREAT TIME TATTOO</span><b>✳</b><span>CAPE TOWN</span><b>✳</b><span>GOOD INK. GREAT TIME.</span><b>✳</b></div>
@@ -45,12 +45,19 @@
 </section>
 <section id="book" class="page" aria-labelledby="book-title" hidden>
 <div class="book-layout section-pad"><div class="book-heading"><p class="eyebrow">GREAT TIME TATTOO / CAPE TOWN</p><h1 id="book-title">YOUR IDEA.<br><span>LET'S INK IT.</span></h1><p>Big plans or a small beginning.<br>Start a conversation with the studio.</p></div>
-<div class="booking-card"><span class="eyebrow">BOOKINGS VIA WHATSAPP</span><h2>Tell us a little<br>about your tattoo.</h2><p>When you message us, it helps to include:</p><ol><li>Your idea and any reference pictures.</li><li>Where you'd like it and the approximate size.</li><li>Your preferred dates.</li></ol>
-<a id="whatsapp-link" class="button dark" hidden target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a><p id="booking-unavailable" class="notice" role="status">Online bookings are coming soon. Our WhatsApp contact will be available here shortly.</p>
-<p class="small-print" id="booking-confirmation" hidden>Your booking is confirmed directly with the studio.</p></div></div>
+<div class="booking-card"><span class="eyebrow">BOOKINGS VIA WHATSAPP</span><h2>Tell us about<br>your next tattoo.</h2><p>Fill in your idea, then send your enquiry to the studio on WhatsApp.</p>
+<form id="booking-form">
+<div class="form-field"><label for="booking-name">Your name <span>(required)</span></label><input id="booking-name" name="name" autocomplete="name" maxlength="100" required></div>
+<div class="form-field"><label for="booking-idea">Your tattoo idea <span>(required)</span></label><textarea id="booking-idea" name="idea" rows="4" maxlength="2000" required placeholder="Tell us what you have in mind"></textarea></div>
+<div class="form-field"><label for="booking-placement">Placement <span>(required)</span></label><input id="booking-placement" name="placement" maxlength="100" required placeholder="For example, forearm or shoulder"></div>
+<div class="form-row"><div class="form-field"><label for="booking-size">Approximate size <span>(optional)</span></label><input id="booking-size" name="size" maxlength="100" placeholder="For example, 10 × 8 cm"></div><div class="form-field"><label for="booking-date">Preferred date <span>(optional)</span></label><input id="booking-date" name="date" type="date"></div></div>
+<button type="submit" id="booking-submit" class="button dark" disabled>Continue to WhatsApp</button>
+<p id="booking-unavailable" class="notice" role="status">You can plan your enquiry here. Sending will be available as soon as the studio's WhatsApp number is added.</p>
+<p class="small-print" id="booking-confirmation">Your enquiry opens as a draft in WhatsApp. Send it there to reach the studio. Your booking is confirmed directly with the studio. Reference pictures can be attached in the chat.</p>
+</form></div></div>
 </section>
 </main>
-<footer><a class="wordmark footer-mark brand-logo" href="#home" aria-label="Great Time Tattoo home"><img src="WhatsApp%20Image%202026-09-25%20at%2008.00.59%20(1).jpeg" alt="Great Time Tattoo Studio" width="1536" height="1024"><span>CAPE TOWN</span></a><p>Good ink. Great time.</p><span>© <span id="year"></span> Great Time Tattoo</span></footer>
+<footer><a class="wordmark footer-mark brand-logo" href="#home" aria-label="Great Time Tattoo home"><img src="WhatsApp%20Image%202026-09-25%20at%2008.00.59%20(1).jpeg" alt="Great Time Tattoo Studio" width="1536" height="1024"><span>CAPE TOWN</span></a><div class="footer-links"><p>Good ink. Great time.</p><a id="instagram-link" hidden target="_blank" rel="noopener noreferrer">Instagram</a><a id="whatsapp-link" hidden target="_blank" rel="noopener noreferrer">WhatsApp</a></div><span>© <span id="year"></span> Great Time Tattoo</span></footer>
 <dialog id="lightbox" aria-labelledby="lightbox-caption"><button class="lightbox-close" aria-label="Close enlarged photograph">Close ×</button><img id="lightbox-image" alt=""><p id="lightbox-caption"></p><div class="lightbox-controls"><button id="previous-photo">Previous</button><span id="photo-count"></span><button id="next-photo">Next</button></div></dialog>
 <noscript><p class="notice">Please enable JavaScript to browse the gallery, booking page and arcade.</p></noscript>
 </body></html>
