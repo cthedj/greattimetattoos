@@ -1,7 +1,9 @@
 /* Studio content. Leave unconfirmed details blank; they are not invented on the site. */
 window.GREAT_TIME = {
   // International digits only, without +, spaces or a leading local 0.
-  whatsappNumber: "",
+  whatsappNumber: "27714946256",
+  // Studio Instagram profile.
+  instagramUrl: "https://www.instagram.com/greattimetattoos/",
   whatsappMessage: "Hi Great Time Tattoo! I'd like to chat about a tattoo.",
   // Supplied Pac-Man NES cartridge, hosted alongside the site.
   arcade: {
@@ -10,7 +12,11 @@ window.GREAT_TIME = {
     gameName: "Pac-Man",
     // Optional parent archive required by some split/clone ROM sets.
     parentRomUrl: "",
-    dataPath: "https://cdn.emulatorjs.org/stable/data/"
+    dataPath: "https://cdn.emulatorjs.org/stable/data/",
+    games: [
+      { id: "pacman", gameName: "Pac-Man", core: "nes", romUrl: "Pac-Man (USA) (Namco).nes" },
+      { id: "tetris", gameName: "Tetris", core: "nes", romUrl: "Tetris (USA) (Tengen) (Unl).nes" }
+    ]
   },
   // Replace empty src values with e.g. "assets/tattoo-01.jpg".
   // Add descriptive alt text and the correct caption for each real photograph.
