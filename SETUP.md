@@ -8,15 +8,15 @@ Navigation: #home, #work, #book. All file references work under a subdirectory.
 Edit site-config.js:
 - whatsappNumber: international digits only, no + or spaces. Empty means bookings remain explicitly unavailable. No messages are sent automatically.
 - gallery: add photos under assets/ and put their relative paths in src. Add accurate alt text and captions. Empty entries display labelled placeholders, never fake studio work.
-- Colours are at the top of styles.css. The provisional palette is yellow, pink, near-black and white. Supplied reference images could not be opened in the build session, so this is not a claimed match.
+- Branding follows the supplied Great Time logo and palette: #E6E5E0, #D0C09E, #DBBB5F, #DFB011 and #000000. The supplied logo is displayed on Home, in the header and in the footer. The gallery remains placeholders for actual tattoo photographs.
 
 ## Pac-Man
 The arcade uses real EmulatorJS emulation, not a custom imitation.
-No copyrighted ROM is included. The default coming-soon state is intentional.
+The user-supplied Pac-Man NES ROM is hosted in this repository and connected through arcade.romUrl.
 1. The supplied filename is Pac-Man (USA) (Namco).nes: prepare for the NES version, not the arcade cabinet version.
-2. The session cannot download attachments, so its actual bytes have NOT been inspected or added to the repository.
-3. Upload the file directly to the repository, preferably as roms/pacman.nes, or provide a stable authorised HTTPS host with CORS.
-4. Set arcade.romUrl only after the file is present. The configured core is nes.
+2. The committed ROM was inspected: 24,592 bytes; valid iNES header; 16 KiB PRG and 8 KiB CHR; mapper 0. Its size exactly matches the header.
+3. arcade.romUrl points to the existing Pac-Man (USA) (Namco).nes file at the repository root.
+4. The configured core is nes.
 5. Test actual play before public launch. End-to-end gameplay remains unverified.
 The loader checks the NES/iNES header before loading the NES emulator; arcade cores still require a ZIP signature.
 Controls: click Start Pac-Man in the emulator, Enter starts, arrow keys move, Shift selects, Z/X are A/B. EmulatorJS provides touch/gamepad controls and its control settings.
@@ -30,7 +30,7 @@ Sources:
 
 ## Hosting
 The repository contains the complete static site. No secrets or server needed.
-GitHub Pages is not enabled in the repository as of this build:
+GitHub Pages is enabled in the repository. If configuring it again:
 Settings > Pages > Build and deployment > Deploy from a branch > main > /(root) > Save.
 Use the actual URL shown by GitHub after deployment completes.
 Alternatively deploy these static files with the existing host.
@@ -39,6 +39,6 @@ The previous chatgpt.site publication has not been replaced; its source connecti
 ## Before public launch
 - Add studio photos and confirm the palette against the supplied references.
 - Add the WhatsApp number.
-- Supply and test the authorised ROM if the arcade is to be available.
+- Test gameplay in the deployed browser; ROM format and wiring are verified but end-to-end emulation is not verified in this environment.
 - Check the deployed site on mobile and desktop.
 Do not add address, hours, artist names, social handles or testimonials until confirmed.
