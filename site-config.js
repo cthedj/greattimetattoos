@@ -3,10 +3,9 @@ window.GREAT_TIME = {
   // International digits only, without +, spaces or a leading local 0.
   whatsappNumber: "",
   whatsappMessage: "Hi Great Time Tattoo! I'd like to chat about a tattoo.",
-  // Set romUrl after the uploaded Pac-Man NES file is available at a stable URL.
-  // Suggested repository path: roms/pacman.nes. Leave blank until the file is present.
+  // Supplied Pac-Man NES cartridge, hosted alongside the site.
   arcade: {
-    romUrl: "",
+    romUrl: "Pac-Man (USA) (Namco).nes",
     core: "nes",
     gameName: "Pac-Man",
     // Optional parent archive required by some split/clone ROM sets.
