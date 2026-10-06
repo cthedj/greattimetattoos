@@ -15,7 +15,8 @@ window.GREAT_TIME = {
     dataPath: "https://cdn.emulatorjs.org/stable/data/",
     games: [
       { id: "pacman", gameName: "Pac-Man", core: "nes", romUrl: "Pac-Man (USA) (Namco).nes" },
-      { id: "tetris", gameName: "Tetris", core: "nes", romUrl: "Tetris (USA) (Tengen) (Unl).nes" }
+      { id: "tetris", gameName: "Tetris", core: "nes", romUrl: "Tetris (USA) (Tengen) (Unl).nes" },
+      { id: "spaceinvaders", gameName: "Space Invaders", core: "n64", romUrl: "Space Invaders (USA).z64", gameID: 3 }
     ]
   },
   // Replace empty src values with e.g. "assets/tattoo-01.jpg".
