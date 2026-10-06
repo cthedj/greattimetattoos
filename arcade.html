@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Pac-Man — Great Time Arcade</title>
 <style>html,body{margin:0;height:100%;background:#101013;color:#fff;font:14px/1.6 monospace}*{box-sizing:border-box}#game{width:100%;height:100%}#status{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;background:#101013;z-index:2}#status[hidden]{display:none}#status p{max-width:340px}button{background:#DFB011;color:#000000;padding:10px 16px;border:0;font:700 14px monospace;cursor:pointer}#help{position:absolute;left:0;right:0;bottom:0;background:#101013ee;padding:8px 12px;color:#ccc;font-size:11px;z-index:3;text-align:center}#help[hidden]{display:none}</style>
-<script src="site-config.js?v=4"></script></head><body>
+<script src="site-config.js?v=6"></script></head><body>
 <div id="game"></div><div id="status" role="status"><p>Loading the arcade…</p></div>
 <script>
 (async () => {
@@ -32,10 +32,14 @@
     if (!response.ok) throw new Error("ROM is unavailable");
     const bytes = new Uint8Array(await response.arrayBuffer());
     const core = cfg.core || "nes";
+    const isN64 = ["n64", "mupen64plus_next", "parallel-n64"].includes(core);
     const isNES = ["nes", "fceumm", "nestopia"].includes(core);
     // Validate the selected format; do not accept HTML fallback pages as ROM data.
     if (isNES) {
       if (bytes.length < 16 || bytes[0] !== 78 || bytes[1] !== 69 || bytes[2] !== 83 || bytes[3] !== 26) throw new Error("Invalid NES ROM header");
+    } else if (isN64) {
+      const magic = Array.from(bytes.slice(0,4)).map(n => n.toString(16).padStart(2,"0")).join("");
+      if (bytes.length < 64 || !["80371240","37804012","40123780"].includes(magic)) throw new Error("Invalid Nintendo 64 ROM header");
     } else if (bytes.length < 4 || bytes[0] !== 80 || bytes[1] !== 75 || bytes[2] !== 3 || bytes[3] !== 4) {
       throw new Error("Invalid arcade archive");
     }
@@ -43,7 +47,7 @@
     window.EJS_core = core;
     window.EJS_gameUrl = url.href;
     window.EJS_gameName = gameName;
-    window.EJS_gameID = requested === "tetris" ? 2 : 1;
+    window.EJS_gameID = cfg.gameID || (requested === "tetris" ? 2 : 1);
     window.EJS_pathtodata = cfg.dataPath || "https://cdn.emulatorjs.org/stable/data/";
     if (cfg.parentRomUrl) window.EJS_gameParentUrl = new URL(cfg.parentRomUrl, location.href).href;
     window.EJS_color = "#DFB011";
@@ -60,7 +64,7 @@
       0: {
         0: {value:"x",value2:"BUTTON_2"},
         8: {value:"z",value2:"BUTTON_1"},
-        2: {value:isNES ? "shift" : "5",value2:"SELECT"},
+        2: {value:isNES || isN64 ? "shift" : "5",value2:"SELECT"},
         3: {value:"enter",value2:"START"},
         4: {value:"up arrow",value2:"DPAD_UP"},
         5: {value:"down arrow",value2:"DPAD_DOWN"},
@@ -72,6 +76,22 @@
       2: {},
       3: {}
     };
+    if (isN64) Object.assign(window.EJS_defaultControls[0], {
+      1: {value:"c",value2:"BUTTON_4"},
+      9: {value:"v",value2:"BUTTON_3"},
+      10: {value:"q",value2:"LEFT_TOP_SHOULDER"},
+      11: {value:"e",value2:"RIGHT_TOP_SHOULDER"},
+      12: {value:"r",value2:"LEFT_BOTTOM_SHOULDER"},
+      13: {value:"t",value2:"RIGHT_BOTTOM_SHOULDER"},
+      16: {value:"d",value2:"LEFT_STICK_X:+1"},
+      17: {value:"a",value2:"LEFT_STICK_X:-1"},
+      18: {value:"s",value2:"LEFT_STICK_Y:+1"},
+      19: {value:"w",value2:"LEFT_STICK_Y:-1"},
+      20: {value:"l",value2:"RIGHT_STICK_X:+1"},
+      21: {value:"j",value2:"RIGHT_STICK_X:-1"},
+      22: {value:"k",value2:"RIGHT_STICK_Y:+1"},
+      23: {value:"i",value2:"RIGHT_STICK_Y:-1"}
+    });
     status.textContent = "Loading arcade controls…";
     const script = document.createElement("script");
     script.src = window.EJS_pathtodata + "loader.js";
