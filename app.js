@@ -145,10 +145,6 @@
 
   let referenceFiles = [];
   let referenceUrls = [];
-  function canShareImages() {
-    try { return referenceFiles.length > 0 && !!window.navigator?.canShare?.({files:referenceFiles}) && typeof window.navigator.share === "function"; }
-    catch { return false; }
-  }
   function updateReferences() {
     referenceUrls.forEach(url => URL.revokeObjectURL(url));
     referenceUrls = [];
@@ -166,7 +162,7 @@
       $("reference-previews").append(figure);
     });
     $("clear-references").hidden = !referenceFiles.length;
-    $("booking-submit").textContent = canShareImages() ? "Share enquiry & images" : "Continue to WhatsApp";
+    $("booking-submit").textContent = "Continue to WhatsApp";
   }
   $("booking-images").addEventListener("change", () => {
     const files = Array.from($("booking-images").files || []);
@@ -175,9 +171,7 @@
     if (invalid) $("booking-images").value = "";
     $("reference-status").textContent = invalid
       ? "Please choose up to 4 JPG, PNG or WebP images, no larger than 10 MB each."
-      : !files.length ? "" : canShareImages()
-        ? files.length + " image(s) selected. Choose WhatsApp and the studio in the share menu to send them with your enquiry."
-        : files.length + " image(s) selected. Attach these images in the WhatsApp chat after continuing; this browser cannot include them automatically.";
+      : !files.length ? "" : files.length + " image(s) selected. Continue to the studio’s WhatsApp chat, then attach these images before sending.";
     updateReferences();
   });
   $("clear-references").addEventListener("click", () => {
@@ -189,7 +183,7 @@
 
   const requiredFields = ["booking-name", "booking-idea", "booking-placement"];
   requiredFields.forEach(id => $(id).addEventListener("input", () => $(id).setCustomValidity("")));
-  $("booking-form").addEventListener("submit", async event => {
+  $("booking-form").addEventListener("submit", event => {
     event.preventDefault();
     if (!hasWhatsApp) return;
     requiredFields.forEach(id => $(id).setCustomValidity($(id).value.trim() ? "" : "Please fill in this field."));
@@ -203,25 +197,7 @@
       "Approximate size: " + ($("booking-size").value.trim() || "To discuss"),
       "Preferred date: " + ($("booking-date").value || "Flexible")
     ];
-    if (referenceFiles.length) lines.push("", "Reference/design images: " + referenceFiles.map(file => file.name).join(", "));
-    if (canShareImages()) {
-      $("booking-submit").disabled = true;
-      try {
-        await window.navigator.share({
-          title:"Tattoo enquiry for Great Time Tattoo",
-          text:lines.join("\n") + "\n\nFor Great Time Tattoo: +27 71 494 6256",
-          files:referenceFiles
-        });
-        $("reference-status").textContent = "Share menu closed. If you sent your enquiry, the studio will confirm your booking in WhatsApp.";
-        return;
-      } catch (error) {
-        if (error.name === "AbortError") {
-          $("reference-status").textContent = "Sharing cancelled. Your enquiry and images are still here.";
-          return;
-        }
-        $("reference-status").textContent = "Images could not be shared automatically. Attach them in the WhatsApp chat before sending your enquiry.";
-      } finally { $("booking-submit").disabled = !hasWhatsApp; }
-    }
+    if (referenceFiles.length) lines.push("", "Reference/design images to attach: " + referenceFiles.map(file => file.name).join(", "));
     location.assign("https://wa.me/" + phone + "?text=" + encodeURIComponent(lines.join("\n")));
   });
 
