@@ -9,6 +9,7 @@ Edit site-config.js:
 - whatsappNumber: international digits only, no + or spaces. Empty means bookings remain explicitly unavailable. No messages are sent automatically.
 - instagramUrl: confirmed studio profile URL; shown prominently in the header.
 - The booking form collects name, tattoo idea, placement, approximate size and preferred date. It opens a prefilled WhatsApp draft. Visitors send it themselves and attach references in the chat; the studio confirms the appointment. No form data is stored on a server.
+- Optional design references: up to four JPG/PNG/WebP images, maximum 10 MiB each, with local previews and a clear-images button. Images are not uploaded or stored by the site. When navigator.canShare supports the files, submit opens the native share menu with the enquiry and images; visitors choose WhatsApp and the studio contact. If sharing is unavailable or fails, the form opens the direct WhatsApp draft and explains that images must be attached in the chat. Cancelling the share menu keeps the form intact.
 - gallery: add photos under assets/ and put their relative paths in src. Add accurate alt text and captions. Empty entries display labelled placeholders, never fake studio work.
 - Branding follows the supplied Great Time logo and palette: #E6E5E0, #D0C09E, #DBBB5F, #DFB011 and #000000. The supplied logo is displayed on Home, in the header and in the footer. The gallery remains placeholders for actual tattoo photographs.
 
