@@ -180,7 +180,9 @@
     $("launch-game").textContent = "Play " + next.gameName;
     $("launch-game").hidden = !available;
     $("game-frame").title = next.gameName + " emulator";
-    $("game-controls").textContent = next.id === "tetris"
+    $("game-controls").textContent = next.id === "spaceinvaders"
+      ? "Nintendo 64 version · Enter to start · Arrows / WASD to move · Z / X action · Q / E shoulders · Touch controls on mobile"
+      : next.id === "tetris"
       ? "Enter to start · Arrow keys to move · Z / X to rotate · Touch controls on mobile"
       : "Enter to start · Arrow keys to move · Touch controls on mobile";
     gameButtons.forEach(button => {
@@ -192,7 +194,7 @@
   if (selectedGame) selectGame(selectedGame.id);
   $("launch-game").addEventListener("click", () => {
     if (!selectedGame || !safeAsset(selectedGame.romUrl)) return;
-    $("game-frame").src = "arcade.html?game=" + encodeURIComponent(selectedGame.id) + "&v=4";
+    $("game-frame").src = "arcade.html?game=" + encodeURIComponent(selectedGame.id) + "&v=6";
     $("game-frame").hidden = false;
     $("game-waiting").hidden = true;
     $("close-game").hidden = false;
