@@ -7,7 +7,7 @@ Navigation: #home, #work, #book. All file references work under a subdirectory.
 ## Content
 Edit site-config.js:
 - whatsappNumber: international digits only, no + or spaces. Empty means bookings remain explicitly unavailable. No messages are sent automatically.
-- instagramUrl: confirmed studio profile URL; shown in the footer.
+- instagramUrl: confirmed studio profile URL; shown prominently in the header.
 - The booking form collects name, tattoo idea, placement, approximate size and preferred date. It opens a prefilled WhatsApp draft. Visitors send it themselves and attach references in the chat; the studio confirms the appointment. No form data is stored on a server.
 - gallery: add photos under assets/ and put their relative paths in src. Add accurate alt text and captions. Empty entries display labelled placeholders, never fake studio work.
 - Branding follows the supplied Great Time logo and palette: #E6E5E0, #D0C09E, #DBBB5F, #DFB011 and #000000. The supplied logo is displayed on Home, in the header and in the footer. The gallery remains placeholders for actual tattoo photographs.
@@ -20,11 +20,11 @@ The user-supplied Pac-Man NES ROM is hosted in this repository and connected thr
 3. arcade.romUrl points to the existing Pac-Man (USA) (Namco).nes file at the repository root.
 4. The configured core is nes.
 5. Test actual play before public launch. End-to-end gameplay remains unverified.
-The loader checks the NES/iNES header before loading the NES emulator; arcade cores still require a ZIP signature.
+The loader checks the NES/iNES header before loading the NES emulator; N64 uses its cartridge header and arcade cores still require a ZIP signature.
 Controls: click Start Pac-Man in the emulator, Enter starts, arrow keys move, Shift selects, Z/X are A/B. EmulatorJS provides touch/gamepad controls and its control settings.
 Use Exit game to unload the emulator and stop sound; leaving Home also unloads it.
-Tetris is selectable on Home and uses the supplied Tetris (USA) (Tengen) (Unl).nes ROM with the NES core. Its valid iNES header declares 32 KiB PRG, 16 KiB CHR and mapper 3; file size 49,168 bytes matches the header. Switching games unloads the previous emulator. Space Invaders remains coming soon.
-Configure each game in arcade.games. Both games keep separate save identities.
+Tetris is selectable on Home and uses the supplied Tetris (USA) (Tengen) (Unl).nes ROM with the NES core. Its valid iNES header declares 32 KiB PRG, 16 KiB CHR and mapper 3; file size 49,168 bytes matches the header. Switching games unloads the previous emulator. Space Invaders is selectable and uses the supplied 8 MiB Space Invaders (USA).z64 Nintendo 64 ROM with the n64 core. The loader validates N64 byte-order signatures before loading it. This is the N64 release, rather than the original cabinet game.
+Configure each game in arcade.games. All three games keep separate save identities.
 Emulator files load on demand from the official stable CDN. A network connection is required.
 Sources:
 - https://emulatorjs.org/docs/systems/nes-famicom/
